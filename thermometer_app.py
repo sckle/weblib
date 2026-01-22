@@ -71,7 +71,7 @@ def main(settings_path="conf/settings.json"):
     broker = mqtt_conf["broker"]
     port = mqtt_conf["port"]
     topic = f"{hostname}/{jSettings['DS18B20']['topic']}"
-    interval = mqtt_conf["interval"]
+    timeout = mqtt_conf["timeout"]
     username = mqtt_conf.get("username")
     password = mqtt_conf.get("password")
 
@@ -104,7 +104,7 @@ def main(settings_path="conf/settings.json"):
             temperature, unit = ambientTemperatureSensor.get_temperature()
             if not publish_ambient_temperature(mqtt_client, topic, ambientTemperatureSensorId, temperature, unit):
                 return
-            time.sleep(10)
+            time.sleep(timeout)
 
     except KeyboardInterrupt:
         print("Exiting...")
