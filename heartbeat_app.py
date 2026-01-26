@@ -20,19 +20,19 @@ def on_disconnect(client, userdata, rc, properties=None):
     if rc != 0:
         print("Unexpected disconnection. Will attempt to reconnect.")
 
-def main(settings_path="conf/settings.json"):
-    # Load settings
-    with open(settings_path, "r") as f:
-        settings = json.load(f)
+def main(jSettings_path="conf/jSettings.json"):
+    # Load jSettings
+    with open(jSettings_path, "r") as f:
+        jSettings = json.load(f)
 
     hostname = socket.gethostname()
-    mqtt_conf = settings["MQTT-AWS"]
+    mqtt_conf = jSettings["MQTT-AWS"]
     broker = mqtt_conf["broker"]
     port = mqtt_conf["port"]
-    topic = f"{hostname}/{mqtt_conf['topic']}"
-    interval = mqtt_conf["interval"]
+    topic = f"{hostname}/{jSettings['heartbeat']['topic']}"
     username = mqtt_conf.get("username")
     password = mqtt_conf.get("password")
+    heartbeat_interval = jSettings["heartbeat"]["interval"]
 
     # Store connection state
     userdata = {"connected": False}
@@ -84,7 +84,7 @@ def main(settings_path="conf/settings.json"):
                 print(f"Exception during publishing: {e}")
                 return
 
-            time.sleep(interval)
+            time.sleep(heartbeat_interval)
 
     except KeyboardInterrupt:
         print("Exiting...")
