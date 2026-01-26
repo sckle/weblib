@@ -79,8 +79,10 @@ def main(settings_path="conf/settings.json"):
                     print(f"Sent message to topic `{topic}`")
                 else:
                     print(f"Failed to send message to topic `{topic}`, error code: {status}")
+                    return
             except Exception as e:
                 print(f"Exception during publishing: {e}")
+                return
 
             time.sleep(interval)
 
